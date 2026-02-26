@@ -8,10 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/raw-materials")
@@ -24,5 +23,11 @@ public class RawMaterialControllerImpl implements RawMaterialController {
     public ResponseEntity<RawMaterialResponseDTO> save(@RequestBody @Valid RawMaterialDTO rawMaterialDTO) {
         RawMaterialResponseDTO rawMaterialSaved = this.rawMaterialService.save(rawMaterialDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(rawMaterialSaved);
+    }
+
+    @Override
+    @GetMapping("/{rawMaterialId}")
+    public ResponseEntity<RawMaterialResponseDTO> findById(@PathVariable UUID rawMaterialId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.rawMaterialService.findById(rawMaterialId));
     }
 }

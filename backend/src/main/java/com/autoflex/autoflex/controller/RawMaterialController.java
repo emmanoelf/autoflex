@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.UUID;
+
 @Tag(name = "Raw Material Controller")
 public interface RawMaterialController {
 
@@ -21,4 +23,18 @@ public interface RawMaterialController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialDTO.class))})
     })
     ResponseEntity<RawMaterialResponseDTO> save(RawMaterialDTO rawMaterialDTO);
+
+    @Operation(summary = "Get raw material by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Get a raw material by ID",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialDTO.class))}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Product not found",
+                    content = @Content
+            )
+    })
+    ResponseEntity<RawMaterialResponseDTO> findById(UUID rawMaterialId);
 }
