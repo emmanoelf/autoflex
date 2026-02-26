@@ -1,0 +1,27 @@
+package com.autoflex.autoflex.service.impl;
+
+import com.autoflex.autoflex.dto.RawMaterialDTO;
+import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
+import com.autoflex.autoflex.mapper.RawMaterialMapper;
+import com.autoflex.autoflex.model.RawMaterial;
+import com.autoflex.autoflex.repository.RawMaterialRepository;
+import com.autoflex.autoflex.service.RawMaterialService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class RawMaterialServiceImpl implements RawMaterialService {
+    private final RawMaterialRepository rawMaterialRepository;
+
+    @Override
+    public RawMaterialResponseDTO save(RawMaterialDTO rawMaterialDTO) {
+        if(this.rawMaterialRepository.existsByCode(rawMaterialDTO.code())){
+            throw new IllegalArgumentException("Code already exists");
+        }
+
+        RawMaterial rawMaterial = RawMaterialMapper.toModel(rawMaterialDTO);
+        RawMaterial savedRawMaterial = this.rawMaterialRepository.saveAndFlush(rawMaterial);
+        return RawMaterialMapper.toDTO(savedRawMaterial);
+    }
+}
