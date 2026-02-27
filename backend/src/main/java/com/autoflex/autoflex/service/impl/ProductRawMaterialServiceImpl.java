@@ -1,6 +1,7 @@
 package com.autoflex.autoflex.service.impl;
 
 import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
+import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 import com.autoflex.autoflex.exception.NotFoundException;
@@ -15,6 +16,10 @@ import com.autoflex.autoflex.repository.RawMaterialRepository;
 import com.autoflex.autoflex.service.ProductRawMaterialService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -92,5 +97,14 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
 
         Product product = productRawMaterial.getProduct();
         product.getRawMaterials().remove(productRawMaterial);
+    }
+
+    @Override
+    public Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+
+        Page<Product> productsPage = this.productRepository.findAll(pageable);
+
+        return productsPage.map(product -> ProductRawMaterialMapper.toResponseDTO(product, true));
     }
 }

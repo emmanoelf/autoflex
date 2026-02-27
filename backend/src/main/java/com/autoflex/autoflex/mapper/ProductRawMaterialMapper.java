@@ -1,6 +1,7 @@
 package com.autoflex.autoflex.mapper;
 
 import com.autoflex.autoflex.dto.ProductRawMaterialDTO;
+import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialInputDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.model.Product;
@@ -23,6 +24,7 @@ public class ProductRawMaterialMapper {
         return new ProductRawMaterialDTO(
                 productRawMaterial.getId(),
                 productRawMaterial.getRawMaterial().getName(),
+                productRawMaterial.getRawMaterial().getStockQuantity(),
                 productRawMaterial.getRequiredQuantity()
         );
     }
@@ -37,6 +39,19 @@ public class ProductRawMaterialMapper {
                 product.getCode(),
                 product.getName(),
                 product.getPrice(),
+                rawMaterialsDto
+        );
+    }
+
+    public static ProductRawMaterialFindAllDTO toResponseDTO(Product product, boolean listView){
+        List<ProductRawMaterialDTO> rawMaterialsDto = product.getRawMaterials()
+                .stream().map(ProductRawMaterialMapper::toDTO)
+                .toList();
+
+        return new ProductRawMaterialFindAllDTO(
+                product.getId(),
+                product.getCode(),
+                product.getName(),
                 rawMaterialsDto
         );
     }
