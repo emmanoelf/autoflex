@@ -7,6 +7,7 @@ import com.autoflex.autoflex.mapper.RawMaterialMapper;
 import com.autoflex.autoflex.model.RawMaterial;
 import com.autoflex.autoflex.repository.RawMaterialRepository;
 import com.autoflex.autoflex.service.RawMaterialService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     private final RawMaterialRepository rawMaterialRepository;
 
     @Override
+    @Transactional
     public RawMaterialResponseDTO save(RawMaterialDTO rawMaterialDTO) {
         if(this.rawMaterialRepository.existsByCode(rawMaterialDTO.code())){
             throw new IllegalArgumentException("Code already exists");
@@ -46,5 +48,17 @@ public class RawMaterialServiceImpl implements RawMaterialService {
                         rawMaterial.getName(),
                         rawMaterial.getStockQuantity()
                 ));
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(UUID rawMaterialId) {
+        Long rowsAffected = this.rawMaterialRepository.deleteRawMaterialById(rawMaterialId);
+
+        if(rowsAffected == 0){
+            throw new NotFoundException("Raw material not found");
+        }
+
+        this.rawMaterialRepository.flush();
     }
 }

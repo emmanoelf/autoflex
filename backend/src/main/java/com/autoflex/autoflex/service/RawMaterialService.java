@@ -11,4 +11,5 @@ public interface RawMaterialService {
     RawMaterialResponseDTO save(RawMaterialDTO rawMaterialDTO);
     RawMaterialResponseDTO findById(UUID rawMaterialID);
     Page<RawMaterialResponseDTO> findAll(Pageable pageable);
+    void deleteById(UUID rawMaterialId);
 }
