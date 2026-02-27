@@ -2,10 +2,12 @@ package com.autoflex.autoflex.controller.impl;
 
 import com.autoflex.autoflex.controller.ProductRawMaterialController;
 import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
+import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 import com.autoflex.autoflex.service.ProductRawMaterialService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +39,12 @@ public class ProductRawMaterialControllerImpl implements ProductRawMaterialContr
     public ResponseEntity<Void> deleteAssociationById(@PathVariable UUID productRawMaterialId) {
         this.productRawMaterialService.deleteById(productRawMaterialId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
+    @GetMapping("/")
+    public Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(@RequestParam(defaultValue = "0") int page,
+                                                                           @RequestParam(defaultValue = "10") int size) {
+        return this.productRawMaterialService.findAllProductsWithMaterials(page, size);
     }
 }

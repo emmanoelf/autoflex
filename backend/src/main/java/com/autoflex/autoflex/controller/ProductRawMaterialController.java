@@ -1,6 +1,7 @@
 package com.autoflex.autoflex.controller;
 
 import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
+import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -69,4 +71,17 @@ public interface ProductRawMaterialController {
             )
     })
     ResponseEntity<Void> deleteAssociationById(UUID productRawMaterialId);
+
+    @Operation(summary = "List all products with their raw materials (paginated)")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Products and raw materials retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProductRawMaterialFindAllDTO.class)
+                    )
+            )
+    })
+    Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size);
 }
