@@ -6,6 +6,8 @@ import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import com.autoflex.autoflex.service.RawMaterialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +31,11 @@ public class RawMaterialControllerImpl implements RawMaterialController {
     @GetMapping("/{rawMaterialId}")
     public ResponseEntity<RawMaterialResponseDTO> findById(@PathVariable UUID rawMaterialId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.rawMaterialService.findById(rawMaterialId));
+    }
+
+    @Override
+    @GetMapping("/")
+    public ResponseEntity<Page<RawMaterialResponseDTO>> findAll(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.rawMaterialService.findAll(pageable));
     }
 }
