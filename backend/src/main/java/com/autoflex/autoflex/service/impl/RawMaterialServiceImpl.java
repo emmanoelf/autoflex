@@ -61,4 +61,23 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 
         this.rawMaterialRepository.flush();
     }
+
+    @Override
+    @Transactional
+    public RawMaterialResponseDTO update(UUID rawMaterialId, RawMaterialDTO rawMaterialDTO) {
+        RawMaterial findRawMaterial = this.rawMaterialRepository.findById(rawMaterialId)
+                .orElseThrow(() -> new NotFoundException("Raw material not found"));
+
+        boolean codeTaken = this.rawMaterialRepository.existsByCode(rawMaterialDTO.code());
+        if(codeTaken){
+            throw new IllegalArgumentException("Code already in use");
+        }
+
+        findRawMaterial.setCode(rawMaterialDTO.code());
+        findRawMaterial.setName(rawMaterialDTO.name());
+        findRawMaterial.setStockQuantity(rawMaterialDTO.stockQuantity());
+
+        RawMaterial rawMaterialUpdated = this.rawMaterialRepository.saveAndFlush(findRawMaterial);
+        return RawMaterialMapper.toDTO(rawMaterialUpdated);
+    }
 }

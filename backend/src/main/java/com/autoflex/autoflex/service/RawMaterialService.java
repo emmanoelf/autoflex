@@ -12,4 +12,5 @@ public interface RawMaterialService {
     RawMaterialResponseDTO findById(UUID rawMaterialID);
     Page<RawMaterialResponseDTO> findAll(Pageable pageable);
     void deleteById(UUID rawMaterialId);
+    RawMaterialResponseDTO update(UUID rawMaterialId, RawMaterialDTO rawMaterialDTO);
 }
