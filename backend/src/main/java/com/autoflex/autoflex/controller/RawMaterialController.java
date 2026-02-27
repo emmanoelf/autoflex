@@ -1,6 +1,5 @@
 package com.autoflex.autoflex.controller;
 
-import com.autoflex.autoflex.dto.ProductResponseDTO;
 import com.autoflex.autoflex.dto.RawMaterialDTO;
 import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
