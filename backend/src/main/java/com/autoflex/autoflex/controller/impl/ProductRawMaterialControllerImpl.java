@@ -47,4 +47,10 @@ public class ProductRawMaterialControllerImpl implements ProductRawMaterialContr
                                                                            @RequestParam(defaultValue = "10") int size) {
         return this.productRawMaterialService.findAllProductsWithMaterials(page, size);
     }
+
+    @Override
+    @GetMapping("/{productRawMaterialId}")
+    public ResponseEntity<ProductRawMaterialResponseDTO> findByProductId(@PathVariable UUID productRawMaterialId) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.productRawMaterialService.findByProductId(productRawMaterialId));
+    }
 }

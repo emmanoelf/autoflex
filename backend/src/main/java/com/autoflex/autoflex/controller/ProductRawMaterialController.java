@@ -1,9 +1,6 @@
 package com.autoflex.autoflex.controller;
 
-import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
-import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
-import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
-import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
+import com.autoflex.autoflex.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -84,4 +81,21 @@ public interface ProductRawMaterialController {
             )
     })
     Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size);
+
+    @Operation(summary = "Get a product raw material association by product id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Association retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProductRawMaterialResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Association not found"
+            )
+    })
+    ResponseEntity<ProductRawMaterialResponseDTO> findByProductId(UUID productRawMaterialId);
 }
