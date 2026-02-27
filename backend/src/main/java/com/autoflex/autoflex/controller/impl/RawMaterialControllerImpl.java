@@ -45,4 +45,11 @@ public class RawMaterialControllerImpl implements RawMaterialController {
         this.rawMaterialService.deleteById(rawMaterialId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @Override
+    @PutMapping("/{rawMaterialId}")
+    public ResponseEntity<RawMaterialResponseDTO> update(@PathVariable UUID rawMaterialId,
+                                                         @RequestBody RawMaterialDTO rawMaterialDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.rawMaterialService.update(rawMaterialId, rawMaterialDTO));
+    }
 }

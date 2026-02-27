@@ -1,5 +1,6 @@
 package com.autoflex.autoflex.controller;
 
+import com.autoflex.autoflex.dto.ProductResponseDTO;
 import com.autoflex.autoflex.dto.RawMaterialDTO;
 import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ public interface RawMaterialController {
             @ApiResponse(
                     responseCode = "201",
                     description = "Raw material create successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialDTO.class))})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialResponseDTO.class))})
     })
     ResponseEntity<RawMaterialResponseDTO> save(RawMaterialDTO rawMaterialDTO);
 
@@ -31,7 +32,7 @@ public interface RawMaterialController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Get a raw material by ID",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialResponseDTO.class))}),
             @ApiResponse(
                     responseCode = "404",
                     description = "Raw material not found",
@@ -58,7 +59,7 @@ public interface RawMaterialController {
             @ApiResponse(
                     responseCode = "204",
                     description = "Raw material deleted successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialDTO.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialResponseDTO.class))}),
             @ApiResponse(
                     responseCode = "404",
                     description = "Raw material not found",
@@ -66,4 +67,24 @@ public interface RawMaterialController {
             )
     })
     ResponseEntity<RawMaterialResponseDTO> deleteById(UUID rawMaterialId);
+
+    @Operation(summary = "Update raw material by ID")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Raw material updated successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialResponseDTO.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Product not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid input or code already exists",
+                    content = @Content
+            )
+    })
+    ResponseEntity<RawMaterialResponseDTO> update(UUID rawMaterialId, RawMaterialDTO rawMaterialDTO);
 }
