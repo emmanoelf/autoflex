@@ -1,8 +1,10 @@
 package com.autoflex.autoflex.service.impl;
 
+import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 import com.autoflex.autoflex.exception.NotFoundException;
+import com.autoflex.autoflex.mapper.ProductAvailableProductionMapper;
 import com.autoflex.autoflex.mapper.ProductRawMaterialMapper;
 import com.autoflex.autoflex.model.Product;
 import com.autoflex.autoflex.model.ProductRawMaterial;
@@ -15,6 +17,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -41,5 +45,33 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
         this.productRawMaterialRepository.saveAllAndFlush(rawMaterialAssociations);
 
         return ProductRawMaterialMapper.toResponseDTO(product);
+    }
+
+    @Override
+    public List<ProductAvailableProductionDTO> findProductsAvailableProduction() {
+        List<Product> products = this.productRepository.findAllProductsWithRawMaterialsOrderByPriceDesc();
+        List<ProductAvailableProductionDTO> suggestedProduction = new ArrayList<>();
+
+        for(Product product : products){
+            List<ProductRawMaterial> productRawMaterials = product.getRawMaterials();
+
+            if(productRawMaterials.isEmpty()){
+                continue;
+            }
+
+            int maxProductionQuantity = productRawMaterials
+                    .stream()
+                    .mapToInt(prm -> prm.getRawMaterial().getStockQuantity() / prm.getRequiredQuantity())
+                    .min()
+                    .orElse(0);
+
+            if (maxProductionQuantity > 0) {
+                suggestedProduction.add(ProductAvailableProductionMapper.toDTO(product, maxProductionQuantity));
+            }
+
+        }
+
+        suggestedProduction.sort(Comparator.comparing(ProductAvailableProductionDTO::totalValue).reversed());
+        return suggestedProduction;
     }
 }
