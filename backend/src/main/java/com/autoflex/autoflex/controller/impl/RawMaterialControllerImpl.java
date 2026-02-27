@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,5 +38,12 @@ public class RawMaterialControllerImpl implements RawMaterialController {
     @GetMapping("/")
     public ResponseEntity<Page<RawMaterialResponseDTO>> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.rawMaterialService.findAll(pageable));
+    }
+
+    @Override
+    @DeleteMapping("/{rawMaterialId}")
+    public ResponseEntity<RawMaterialResponseDTO> deleteById(@PathVariable UUID rawMaterialId) {
+        this.rawMaterialService.deleteById(rawMaterialId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

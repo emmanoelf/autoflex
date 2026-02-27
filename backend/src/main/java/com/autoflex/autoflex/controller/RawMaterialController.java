@@ -52,4 +52,18 @@ public interface RawMaterialController {
             )
     })
     ResponseEntity<Page<RawMaterialResponseDTO>> findAll(Pageable pageable);
+
+    @Operation(summary = "Delete raw material by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Raw material deleted successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RawMaterialDTO.class))}),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Raw material not found",
+                    content = @Content
+            )
+    })
+    ResponseEntity<RawMaterialResponseDTO> deleteById(UUID rawMaterialId);
 }
