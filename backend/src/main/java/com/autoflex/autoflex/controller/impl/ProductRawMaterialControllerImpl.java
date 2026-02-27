@@ -1,27 +1,33 @@
 package com.autoflex.autoflex.controller.impl;
 
 import com.autoflex.autoflex.controller.ProductRawMaterialController;
+import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 import com.autoflex.autoflex.service.ProductRawMaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/associate-products-raw-materials")
+@RequestMapping("/api/v1/products-raw-materials")
 @RequiredArgsConstructor
 public class ProductRawMaterialControllerImpl implements ProductRawMaterialController {
     private final ProductRawMaterialService productRawMaterialService;
 
     @Override
-    @PostMapping
+    @PostMapping("/associate")
     public ResponseEntity<ProductRawMaterialResponseDTO> associateProductWithRawMaterials(@RequestBody ProductWithMaterialInputDTO inputDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.productRawMaterialService.associateProductsWithRawMaterials(inputDTO));
+    }
+
+    @Override
+    @GetMapping("/suggested-production-available")
+    public ResponseEntity<List<ProductAvailableProductionDTO>> findProductsAvailableProduction() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.productRawMaterialService.findProductsAvailableProduction());
     }
 }

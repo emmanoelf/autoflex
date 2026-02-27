@@ -1,13 +1,17 @@
 package com.autoflex.autoflex.controller;
 
+import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
 import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface ProductRawMaterialController {
 
@@ -26,4 +30,24 @@ public interface ProductRawMaterialController {
                     content = @Content)
     })
     ResponseEntity<ProductRawMaterialResponseDTO> associateProductWithRawMaterials(ProductWithMaterialInputDTO inputDTO);
+
+    @Operation(
+            summary = "Get producible products with quantities and total value",
+            description = "Returns a list of products that can be produced with the available raw materials in stock. " +
+                    "The list is ordered by product total value in descending order. " +
+                    "Each product includes the maximum producible quantity and the total value."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "List of producible products retrieved successfully",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ProductAvailableProductionDTO.class)))),
+            @ApiResponse(responseCode = "204",
+                    description = "No products can be produced with the available stock",
+                    content = @Content),
+            @ApiResponse(responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content)
+    })
+    ResponseEntity<List<ProductAvailableProductionDTO>> findProductsAvailableProduction();
 }
