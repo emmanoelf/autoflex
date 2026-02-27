@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductRawMaterialController {
 
@@ -50,4 +51,22 @@ public interface ProductRawMaterialController {
                     content = @Content)
     })
     ResponseEntity<List<ProductAvailableProductionDTO>> findProductsAvailableProduction();
+
+    @Operation(
+            summary = "Remove raw material from product",
+            description = "Removes the association between a product and a raw material."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Association successfully removed",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Association not found",
+                    content = @Content
+            )
+    })
+    ResponseEntity<Void> deleteAssociationById(UUID productRawMaterialId);
 }

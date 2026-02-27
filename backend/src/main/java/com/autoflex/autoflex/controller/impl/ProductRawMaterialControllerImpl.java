@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/products-raw-materials")
@@ -29,5 +30,12 @@ public class ProductRawMaterialControllerImpl implements ProductRawMaterialContr
     @GetMapping("/suggested-production-available")
     public ResponseEntity<List<ProductAvailableProductionDTO>> findProductsAvailableProduction() {
         return ResponseEntity.status(HttpStatus.OK).body(this.productRawMaterialService.findProductsAvailableProduction());
+    }
+
+    @Override
+    @DeleteMapping("/{productRawMaterialId}")
+    public ResponseEntity<Void> deleteAssociationById(@PathVariable UUID productRawMaterialId) {
+        this.productRawMaterialService.deleteById(productRawMaterialId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
