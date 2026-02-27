@@ -8,6 +8,8 @@ import com.autoflex.autoflex.model.RawMaterial;
 import com.autoflex.autoflex.repository.RawMaterialRepository;
 import com.autoflex.autoflex.service.RawMaterialService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -33,5 +35,16 @@ public class RawMaterialServiceImpl implements RawMaterialService {
         return this.rawMaterialRepository.findById(rawMaterialID)
                 .map(RawMaterialMapper::toDTO)
                 .orElseThrow(() -> new NotFoundException("Raw material not found"));
+    }
+
+    @Override
+    public Page<RawMaterialResponseDTO> findAll(Pageable pageable) {
+        return this.rawMaterialRepository.findAll(pageable)
+                .map(rawMaterial -> new RawMaterialResponseDTO(
+                        rawMaterial.getId(),
+                        rawMaterial.getCode(),
+                        rawMaterial.getName(),
+                        rawMaterial.getStockQuantity()
+                ));
     }
 }
