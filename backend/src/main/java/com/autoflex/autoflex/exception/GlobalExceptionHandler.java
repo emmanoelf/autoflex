@@ -24,17 +24,16 @@ public class GlobalExceptionHandler{
     }
 
     private ResponseEntity<ProblemDetail> buildProblemDetailResponse(HttpStatus status, ProblemType problemType, Exception ex){
-        ProblemDetail problemDetail = this.createProblemDetailBuilder(status, problemType, ex.getMessage()).build();
+        ProblemDetail problemDetail = this.createProblemDetail(status, problemType, ex.getMessage());
         return ResponseEntity.status(status).body(problemDetail);
     }
 
-    private ProblemDetail.ProblemDetailBuilder createProblemDetailBuilder(HttpStatus status,
-                                                                          ProblemType problemType,
-                                                                          String detail){
+    private ProblemDetail createProblemDetail(HttpStatus status, ProblemType problemType, String detail){
         return ProblemDetail.builder()
                 .status(status.value())
                 .type(problemType.getUri())
                 .title(problemType.getTitle())
-                .detail(detail);
+                .detail(detail)
+                .build();
     }
 }
