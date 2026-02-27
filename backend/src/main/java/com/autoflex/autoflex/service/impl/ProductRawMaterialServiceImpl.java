@@ -17,9 +17,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +33,16 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
         Product product = this.productRepository.findById(inputDTO.productId())
                 .orElseThrow(() -> new NotFoundException("Product not found"));
 
+        Set<UUID> existingRawMaterialIds = product.getRawMaterials()
+                .stream().map(rm -> rm.getRawMaterial().getId()).collect(Collectors.toSet());
+
+        boolean idAlreadyExists = inputDTO.rawMaterials().stream()
+                .anyMatch(rm -> existingRawMaterialIds.contains(rm.rawMaterialId()));
+
+        if (idAlreadyExists) {
+            throw new IllegalArgumentException("One or more raw materials are already associated with this product");
+        }
+
         List<ProductRawMaterial> rawMaterialAssociations = inputDTO.rawMaterials().stream().map(rm -> {
             RawMaterial rawMaterial = this.rawMaterialRepository.findById(rm.rawMaterialId()).orElseThrow(
                     () -> new NotFoundException("Raw material not found"));
@@ -41,8 +50,8 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
             return ProductRawMaterialMapper.toModel(product, rawMaterial, rm);
         }).toList();
 
-        product.setRawMaterials(rawMaterialAssociations);
-        this.productRawMaterialRepository.saveAllAndFlush(rawMaterialAssociations);
+        product.getRawMaterials().addAll(rawMaterialAssociations);
+        this.productRepository.saveAndFlush(product);
 
         return ProductRawMaterialMapper.toResponseDTO(product);
     }
@@ -73,5 +82,15 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
 
         suggestedProduction.sort(Comparator.comparing(ProductAvailableProductionDTO::totalValue).reversed());
         return suggestedProduction;
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(UUID associationId) {
+        ProductRawMaterial productRawMaterial = this.productRawMaterialRepository.findById(associationId)
+                .orElseThrow(() -> new NotFoundException("Association not found"));
+
+        Product product = productRawMaterial.getProduct();
+        product.getRawMaterials().remove(productRawMaterial);
     }
 }

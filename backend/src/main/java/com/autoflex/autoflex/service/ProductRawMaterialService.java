@@ -5,8 +5,10 @@ import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
 import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductRawMaterialService {
     ProductRawMaterialResponseDTO associateProductsWithRawMaterials(ProductWithMaterialInputDTO inputDTO);
     List<ProductAvailableProductionDTO> findProductsAvailableProduction();
+    void deleteById(UUID associationId);
 }
