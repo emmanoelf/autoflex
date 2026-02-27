@@ -65,7 +65,7 @@ public interface ProductController {
                     content = @Content
             )
     })
-    ResponseEntity<List<ProductResponseDTO>> deleteById(UUID productId);
+    ResponseEntity<ProductResponseDTO> deleteById(UUID productId);
 
     @Operation(summary = "Update product by ID")
     @ApiResponses(value = {

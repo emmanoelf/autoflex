@@ -40,7 +40,7 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     @DeleteMapping("/{productId}")
-    public ResponseEntity<List<ProductResponseDTO>> deleteById(@PathVariable UUID productId) {
+    public ResponseEntity<ProductResponseDTO> deleteById(@PathVariable UUID productId) {
         this.productService.deleteById(productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
