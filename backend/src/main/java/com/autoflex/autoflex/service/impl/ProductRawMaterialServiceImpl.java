@@ -107,4 +107,12 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
 
         return productsPage.map(product -> ProductRawMaterialMapper.toResponseDTO(product, true));
     }
+
+    @Override
+    public ProductRawMaterialResponseDTO findByProductId(UUID productRawMaterialId) {
+        Product product = this.productRepository.findById(productRawMaterialId)
+                .orElseThrow(() -> new NotFoundException("Association not found"));
+
+        return ProductRawMaterialMapper.toResponseDTO(product);
+    }
 }

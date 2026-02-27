@@ -14,4 +14,5 @@ public interface ProductRawMaterialService {
     List<ProductAvailableProductionDTO> findProductsAvailableProduction();
     void deleteById(UUID associationId);
     Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size);
+    ProductRawMaterialResponseDTO findByProductId(UUID productRawMaterialId);
 }
