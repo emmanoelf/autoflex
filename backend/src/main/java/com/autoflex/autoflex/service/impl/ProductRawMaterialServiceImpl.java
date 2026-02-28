@@ -1,9 +1,6 @@
 package com.autoflex.autoflex.service.impl;
 
-import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
-import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
-import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
-import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
+import com.autoflex.autoflex.dto.*;
 import com.autoflex.autoflex.exception.NotFoundException;
 import com.autoflex.autoflex.mapper.ProductAvailableProductionMapper;
 import com.autoflex.autoflex.mapper.ProductRawMaterialMapper;
@@ -114,5 +111,29 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
                 .orElseThrow(() -> new NotFoundException("Association not found"));
 
         return ProductRawMaterialMapper.toResponseDTO(product);
+    }
+
+    @Override
+    public ProductRawMaterialResponseDTO update(UUID productRawMaterialId, ProductRawMaterialInputDTO inputDTO) {
+        ProductRawMaterial productRawMaterial = this.productRawMaterialRepository.findById(productRawMaterialId)
+                .orElseThrow(() -> new NotFoundException("Association not found"));
+
+        RawMaterial newRawMaterial = this.rawMaterialRepository.findById(inputDTO.rawMaterialId())
+                .orElseThrow(() -> new NotFoundException("Raw material not found"));
+
+        boolean exists = productRawMaterial.getProduct().getRawMaterials().stream()
+                .anyMatch(prm -> prm.getRawMaterial().getId().equals(inputDTO.rawMaterialId())
+                        && !prm.getId().equals(productRawMaterialId));
+
+        if (exists) {
+            throw new IllegalArgumentException("This product already has the specified raw material associated");
+        }
+
+        productRawMaterial.setRawMaterial(newRawMaterial);
+        productRawMaterial.setRequiredQuantity(inputDTO.requiredQuantity());
+
+        productRawMaterialRepository.saveAndFlush(productRawMaterial);
+
+        return ProductRawMaterialMapper.toResponseDTO(productRawMaterial.getProduct());
     }
 }

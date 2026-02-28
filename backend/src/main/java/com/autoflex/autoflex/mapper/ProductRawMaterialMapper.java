@@ -23,6 +23,7 @@ public class ProductRawMaterialMapper {
     public static ProductRawMaterialDTO toDTO(ProductRawMaterial productRawMaterial){
         return new ProductRawMaterialDTO(
                 productRawMaterial.getId(),
+                productRawMaterial.getRawMaterial().getId(),
                 productRawMaterial.getRawMaterial().getName(),
                 productRawMaterial.getRawMaterial().getStockQuantity(),
                 productRawMaterial.getRequiredQuantity()
