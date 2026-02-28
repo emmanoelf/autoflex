@@ -63,27 +63,51 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
         List<Product> products = this.productRepository.findAllProductsWithRawMaterialsOrderByPriceDesc();
         List<ProductAvailableProductionDTO> suggestedProduction = new ArrayList<>();
 
-        for(Product product : products){
-            List<ProductRawMaterial> productRawMaterials = product.getRawMaterials();
+        Map<UUID, Integer> stockInMemory = this.createGlobalStockInMemory(products);
 
-            if(productRawMaterials.isEmpty()){
+        for (Product product : products) {
+            if (product.getRawMaterials().isEmpty()){
                 continue;
             }
 
-            int maxProductionQuantity = productRawMaterials
-                    .stream()
-                    .mapToInt(prm -> prm.getRawMaterial().getStockQuantity() / prm.getRequiredQuantity())
-                    .min()
-                    .orElse(0);
+            int maxProductionQuantity = this.calculateMaxProduction(product, stockInMemory);
 
             if (maxProductionQuantity > 0) {
                 suggestedProduction.add(ProductAvailableProductionMapper.toDTO(product, maxProductionQuantity));
+                this.consumeStockInMemory(product, stockInMemory, maxProductionQuantity);
             }
-
         }
 
-        suggestedProduction.sort(Comparator.comparing(ProductAvailableProductionDTO::totalValue).reversed());
         return suggestedProduction;
+    }
+
+    private Map<UUID, Integer> createGlobalStockInMemory(List<Product> products) {
+        Map<UUID, Integer> stockMap = new HashMap<>();
+        for (Product product : products) {
+            for (ProductRawMaterial prm : product.getRawMaterials()) {
+                UUID rawId = prm.getRawMaterial().getId();
+                if (!stockMap.containsKey(rawId)) {
+                    stockMap.put(rawId, prm.getRawMaterial().getStockQuantity());
+                }
+            }
+        }
+        return stockMap;
+    }
+
+    private int calculateMaxProduction(Product product, Map<UUID, Integer> stockInMemory) {
+        return product.getRawMaterials()
+                .stream()
+                .mapToInt(prm -> stockInMemory.get(prm.getRawMaterial().getId()) / prm.getRequiredQuantity())
+                .min()
+                .orElse(0);
+    }
+
+    private void consumeStockInMemory(Product product, Map<UUID, Integer> stockInMemory, int quantityProduced) {
+        for (ProductRawMaterial prm : product.getRawMaterials()) {
+            UUID rawId = prm.getRawMaterial().getId();
+            int updatedStock = stockInMemory.get(rawId) - (quantityProduced * prm.getRequiredQuantity());
+            stockInMemory.put(rawId, updatedStock);
+        }
     }
 
     @Override
