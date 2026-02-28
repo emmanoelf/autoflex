@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ProblemType {
     RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found"),
-    INVALID_DATA("/invalid-data", "Invalid data");
+    INVALID_DATA("/invalid-data", "Invalid data"),
+    SERVER_ERROR("/internal-server-errors", "Internal server error");
 
     private String title;
     private String uri;

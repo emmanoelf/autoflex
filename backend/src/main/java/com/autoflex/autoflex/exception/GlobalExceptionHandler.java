@@ -23,8 +23,24 @@ public class GlobalExceptionHandler{
         return buildProblemDetailResponse(HttpStatus.BAD_REQUEST, ProblemType.INVALID_DATA, ex);
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ResponseEntity<ProblemDetail> handleInternalServerError() {
+        return buildProblemDetailResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ProblemType.SERVER_ERROR,
+                "An unexpected error occurred. Please try again later."
+        );
+    }
+
     private ResponseEntity<ProblemDetail> buildProblemDetailResponse(HttpStatus status, ProblemType problemType, Exception ex){
         ProblemDetail problemDetail = this.createProblemDetail(status, problemType, ex.getMessage());
+        return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    private ResponseEntity<ProblemDetail> buildProblemDetailResponse(
+            HttpStatus status, ProblemType problemType, String detail) {
+        ProblemDetail problemDetail = this.createProblemDetail(status, problemType, detail);
         return ResponseEntity.status(status).body(problemDetail);
     }
 
