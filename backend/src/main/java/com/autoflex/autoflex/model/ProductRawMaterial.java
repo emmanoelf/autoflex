@@ -23,5 +23,6 @@ public class ProductRawMaterial {
     @ManyToOne
     private RawMaterial rawMaterial;
 
+    @Column(nullable = false)
     private Integer requiredQuantity;
 }

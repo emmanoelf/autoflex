@@ -17,7 +17,12 @@ public class RawMaterial {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String code;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private Integer stockQuantity;
 }
