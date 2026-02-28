@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
         Product productSaved = this.productRepository.findById(productId).orElseThrow(
                 () ->  new NotFoundException("Product not found"));
 
-        boolean codeTaken = this.productRepository.existsByCode(productDTO.code());
+        boolean codeTaken = this.productRepository.existsByCodeAndIdNot(productDTO.code(), productId);
         if(codeTaken){
             throw new IllegalArgumentException("Code already in use");
         }

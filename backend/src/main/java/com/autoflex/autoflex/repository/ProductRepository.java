@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
     boolean existsByCode(String code);
+    boolean existsByCodeAndIdNot(String code, UUID productId);
     Long deleteProductById(UUID productId);
 
     @Query("""
