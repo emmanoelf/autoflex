@@ -68,7 +68,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
         RawMaterial findRawMaterial = this.rawMaterialRepository.findById(rawMaterialId)
                 .orElseThrow(() -> new NotFoundException("Raw material not found"));
 
-        boolean codeTaken = this.rawMaterialRepository.existsByCode(rawMaterialDTO.code());
+        boolean codeTaken = this.rawMaterialRepository.existsByCodeAndIdNot(rawMaterialDTO.code(), rawMaterialId);
         if(codeTaken){
             throw new IllegalArgumentException("Code already in use");
         }
