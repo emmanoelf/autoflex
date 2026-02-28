@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -80,7 +79,7 @@ public interface ProductRawMaterialController {
                     )
             )
     })
-    Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size);
+    PageResponseDTO<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size);
 
     @Operation(summary = "Get a product raw material association by product id")
     @ApiResponses(value = {

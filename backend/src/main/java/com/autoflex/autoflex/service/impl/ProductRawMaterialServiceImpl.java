@@ -2,6 +2,7 @@ package com.autoflex.autoflex.service.impl;
 
 import com.autoflex.autoflex.dto.*;
 import com.autoflex.autoflex.exception.NotFoundException;
+import com.autoflex.autoflex.mapper.PageMapper;
 import com.autoflex.autoflex.mapper.ProductAvailableProductionMapper;
 import com.autoflex.autoflex.mapper.ProductRawMaterialMapper;
 import com.autoflex.autoflex.model.Product;
@@ -121,12 +122,15 @@ public class ProductRawMaterialServiceImpl implements ProductRawMaterialService 
     }
 
     @Override
-    public Page<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size) {
+    public PageResponseDTO<ProductRawMaterialFindAllDTO> findAllProductsWithMaterials(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
 
         Page<Product> productsPage = this.productRepository.findAll(pageable);
 
-        return productsPage.map(product -> ProductRawMaterialMapper.toResponseDTO(product, true));
+        Page<ProductRawMaterialFindAllDTO> dtoPage = productsPage.map(product ->
+                ProductRawMaterialMapper.toResponseDTO(product, true)
+        );
+        return PageMapper.toPageResponseDTO(dtoPage);
     }
 
     @Override

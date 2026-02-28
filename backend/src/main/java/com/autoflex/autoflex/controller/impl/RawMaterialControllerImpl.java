@@ -1,12 +1,12 @@
 package com.autoflex.autoflex.controller.impl;
 
 import com.autoflex.autoflex.controller.RawMaterialController;
+import com.autoflex.autoflex.dto.PageResponseDTO;
 import com.autoflex.autoflex.dto.RawMaterialDTO;
 import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import com.autoflex.autoflex.service.RawMaterialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class RawMaterialControllerImpl implements RawMaterialController {
 
     @Override
     @GetMapping("/")
-    public ResponseEntity<Page<RawMaterialResponseDTO>> findAll(Pageable pageable) {
+    public ResponseEntity<PageResponseDTO<RawMaterialResponseDTO>> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.rawMaterialService.findAll(pageable));
     }
 

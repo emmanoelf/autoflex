@@ -1,5 +1,6 @@
 package com.autoflex.autoflex.controller;
 
+import com.autoflex.autoflex.dto.PageResponseDTO;
 import com.autoflex.autoflex.dto.RawMaterialDTO;
 import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
@@ -51,7 +51,7 @@ public interface RawMaterialController {
                     )
             )
     })
-    ResponseEntity<Page<RawMaterialResponseDTO>> findAll(Pageable pageable);
+    ResponseEntity<PageResponseDTO<RawMaterialResponseDTO>> findAll(Pageable pageable);
 
     @Operation(summary = "Delete raw material by id")
     @ApiResponses(value = {

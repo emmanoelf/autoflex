@@ -1,8 +1,10 @@
 package com.autoflex.autoflex.service.impl;
 
+import com.autoflex.autoflex.dto.PageResponseDTO;
 import com.autoflex.autoflex.dto.RawMaterialDTO;
 import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import com.autoflex.autoflex.exception.NotFoundException;
+import com.autoflex.autoflex.mapper.PageMapper;
 import com.autoflex.autoflex.mapper.RawMaterialMapper;
 import com.autoflex.autoflex.model.RawMaterial;
 import com.autoflex.autoflex.repository.RawMaterialRepository;
@@ -10,9 +12,11 @@ import com.autoflex.autoflex.service.RawMaterialService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -40,14 +44,19 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     }
 
     @Override
-    public Page<RawMaterialResponseDTO> findAll(Pageable pageable) {
-        return this.rawMaterialRepository.findAll(pageable)
-                .map(rawMaterial -> new RawMaterialResponseDTO(
-                        rawMaterial.getId(),
-                        rawMaterial.getCode(),
-                        rawMaterial.getName(),
-                        rawMaterial.getStockQuantity()
-                ));
+    public PageResponseDTO<RawMaterialResponseDTO> findAll(Pageable pageable) {
+        Page<RawMaterial> page = this.rawMaterialRepository.findAll(pageable);
+
+        List<RawMaterialResponseDTO> content = page.getContent().stream()
+                .map(rm -> new RawMaterialResponseDTO(
+                        rm.getId(),
+                        rm.getCode(),
+                        rm.getName(),
+                        rm.getStockQuantity()
+                ))
+                .toList();
+
+        return PageMapper.toPageResponseDTO(new PageImpl<>(content, pageable, page.getTotalElements()));
     }
 
     @Override
