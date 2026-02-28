@@ -1,10 +1,7 @@
 package com.autoflex.autoflex.controller.impl;
 
 import com.autoflex.autoflex.controller.ProductRawMaterialController;
-import com.autoflex.autoflex.dto.ProductAvailableProductionDTO;
-import com.autoflex.autoflex.dto.ProductRawMaterialFindAllDTO;
-import com.autoflex.autoflex.dto.ProductRawMaterialResponseDTO;
-import com.autoflex.autoflex.dto.ProductWithMaterialInputDTO;
+import com.autoflex.autoflex.dto.*;
 import com.autoflex.autoflex.service.ProductRawMaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,5 +49,12 @@ public class ProductRawMaterialControllerImpl implements ProductRawMaterialContr
     @GetMapping("/{productRawMaterialId}")
     public ResponseEntity<ProductRawMaterialResponseDTO> findByProductId(@PathVariable UUID productRawMaterialId) {
         return ResponseEntity.status(HttpStatus.OK).body(this.productRawMaterialService.findByProductId(productRawMaterialId));
+    }
+
+    @Override
+    @PutMapping("/{productRawMaterialId}")
+    public ResponseEntity<ProductRawMaterialResponseDTO> update(@PathVariable UUID productRawMaterialId,
+                                                                @RequestBody ProductRawMaterialInputDTO inputDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.productRawMaterialService.update(productRawMaterialId, inputDTO));
     }
 }

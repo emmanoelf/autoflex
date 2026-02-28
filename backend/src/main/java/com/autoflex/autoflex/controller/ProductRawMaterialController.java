@@ -98,4 +98,25 @@ public interface ProductRawMaterialController {
             )
     })
     ResponseEntity<ProductRawMaterialResponseDTO> findByProductId(UUID productRawMaterialId);
+
+    @Operation(summary = "Update a product-raw-material association")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Association updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProductRawMaterialResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Association not found"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid input"
+            )
+    })
+    ResponseEntity<ProductRawMaterialResponseDTO> update(UUID productRawMaterialId, ProductRawMaterialInputDTO inputDTO);
 }
