@@ -25,7 +25,8 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ResponseEntity<ProblemDetail> handleInternalServerError() {
+    protected ResponseEntity<ProblemDetail> handleInternalServerError(Exception ex) {
+        ex.printStackTrace();
         return buildProblemDetailResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 ProblemType.SERVER_ERROR,
