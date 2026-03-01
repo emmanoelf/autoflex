@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Tag("unit")
+@Tag("service")
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
