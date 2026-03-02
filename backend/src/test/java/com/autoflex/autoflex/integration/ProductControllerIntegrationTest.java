@@ -1,4 +1,4 @@
-package com.autoflex.autoflex.unit.integration;
+package com.autoflex.autoflex.integration;
 
 import com.autoflex.autoflex.dto.ProductDTO;
 import com.autoflex.autoflex.dto.ProductResponseDTO;
