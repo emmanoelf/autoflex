@@ -144,7 +144,7 @@ public class ProductRawMaterialIntegrationTest {
 
     @Test
     @DisplayName("Should return suggested production available for products")
-    void shouldReturnSuggestedProductionAvailable() throws Exception {
+    public void shouldReturnSuggestedProductionAvailable() throws Exception {
         Product productTable = this.productRepository.save(Product.builder()
                 .code("TAB784")
                 .name("Table")
@@ -186,4 +186,47 @@ public class ProductRawMaterialIntegrationTest {
                 .andExpect(jsonPath("$[1].totalValue").value(44.0));
     }
 
+    @Test
+    @DisplayName("Should not return product without raw materials")
+    public void shouldNotReturnProductWithoutRawMaterials() throws Exception {
+        Product productWithoutRaw = this.productRepository.save(Product.builder()
+                .code("NOPRM")
+                .name("NoRaw")
+                .price(new BigDecimal("100.00"))
+                .rawMaterials(new ArrayList<>())
+                .build());
+
+        this.mockMvc.perform(get("/api/v1/products-raw-materials/suggested-production-available")
+                        .accept("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should not return product when raw material stock is insufficient")
+    public void shouldNotReturnProductWhenStockIsInsufficient() throws Exception {
+        this.savedRawMaterial.setStockQuantity(1);
+        this.rawMaterialRepository.save(this.savedRawMaterial);
+
+        Product product = this.productRepository.save(Product.builder()
+                .code("TABLE1")
+                .name("Table")
+                .price(new BigDecimal("50.00"))
+                .rawMaterials(new ArrayList<>())
+                .build());
+
+        ProductRawMaterial prm = ProductRawMaterial.builder()
+                .product(product)
+                .rawMaterial(this.savedRawMaterial)
+                .requiredQuantity(5)
+                .build();
+
+        product.getRawMaterials().add(prm);
+        this.productRepository.save(product);
+
+        this.mockMvc.perform(get("/api/v1/products-raw-materials/suggested-production-available")
+                        .accept("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
 }
