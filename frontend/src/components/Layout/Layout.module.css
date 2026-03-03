@@ -1,0 +1,26 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #f3f4f6;
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+.menuButton {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .menuButton {
+    display: block;
+  }
+}
