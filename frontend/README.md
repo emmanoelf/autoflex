@@ -46,14 +46,3 @@ npm run dev
 ```
 
 The app will be available at `http://localhost:5173`.
-
-### Environment
-
-If needed, configure the API base URL in the Axios instance:
-
-```ts
-// src/services/api.ts
-baseURL: "http://localhost:8080/api"
-```
-
----
