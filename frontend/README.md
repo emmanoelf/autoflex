@@ -1,4 +1,4 @@
-#Autoflex — Frontend
+# Autoflex — Frontend
 
 A responsive web interface for managing industrial inventory, built with **React + TypeScript** as part of a full-stack assessment project.
 
