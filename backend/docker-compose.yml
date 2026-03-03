@@ -10,6 +10,27 @@ services:
       - APP_USER_PASSWORD=autoflex
     volumes:
       - oracle_data:/opt/oracle/oradata
+    healthcheck:
+      test: [ "CMD-SHELL", "exit | sqlplus -L SYS/autoflex@localhost:1521/FREEPDB1 AS SYSDBA" ]
+      interval: 20s
+      timeout: 10s
+      retries: 30
+      start_period: 90s
+
+  app:
+    build: .
+    container_name: autoflex-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle-db:1521/FREEPDB1
+      SPRING_DATASOURCE_USERNAME: autoflex
+      SPRING_DATASOURCE_PASSWORD: autoflex
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    restart: on-failure
 
 volumes:
   oracle_data:
