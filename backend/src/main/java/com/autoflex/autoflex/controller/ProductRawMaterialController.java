@@ -23,10 +23,12 @@ public interface ProductRawMaterialController {
                             schema = @Schema(implementation = ProductRawMaterialResponseDTO.class))),
             @ApiResponse(responseCode = "404",
                     description = "Product or raw material not found",
-                    content = @Content),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
+            ),
             @ApiResponse(responseCode = "400",
                     description = "Invalid input data",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
+            )
     })
     ResponseEntity<ProductRawMaterialResponseDTO> associateProductWithRawMaterials(ProductWithMaterialInputDTO inputDTO);
 
@@ -46,7 +48,8 @@ public interface ProductRawMaterialController {
                     content = @Content),
             @ApiResponse(responseCode = "500",
                     description = "Internal server error",
-                    content = @Content)
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
+            )
     })
     ResponseEntity<List<ProductAvailableProductionDTO>> findProductsAvailableProduction();
 
@@ -63,7 +66,7 @@ public interface ProductRawMaterialController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Association not found",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<Void> deleteAssociationById(UUID productRawMaterialId);
@@ -93,7 +96,8 @@ public interface ProductRawMaterialController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Association not found"
+                    description = "Association not found",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<ProductRawMaterialResponseDTO> findByProductId(UUID productRawMaterialId);
@@ -110,11 +114,13 @@ public interface ProductRawMaterialController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Association not found"
+                    description = "Association not found",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid input"
+                    description = "Invalid input",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<ProductRawMaterialResponseDTO> update(UUID productRawMaterialId, ProductRawMaterialInputDTO inputDTO);

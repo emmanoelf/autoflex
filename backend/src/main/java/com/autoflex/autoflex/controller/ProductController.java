@@ -1,5 +1,6 @@
 package com.autoflex.autoflex.controller;
 
+import com.autoflex.autoflex.dto.ProblemDetail;
 import com.autoflex.autoflex.dto.ProductDTO;
 import com.autoflex.autoflex.dto.ProductResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,7 @@ public interface ProductController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Product not found",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<ProductResponseDTO> findById(UUID productId);
@@ -62,7 +63,7 @@ public interface ProductController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Product not found",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<ProductResponseDTO> deleteById(UUID productId);
@@ -77,12 +78,12 @@ public interface ProductController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Product not found",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Invalid input or code already exists",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<ProductResponseDTO> update(UUID productId, ProductDTO productDTO);

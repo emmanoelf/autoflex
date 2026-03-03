@@ -1,6 +1,7 @@
 package com.autoflex.autoflex.controller;
 
 import com.autoflex.autoflex.dto.PageResponseDTO;
+import com.autoflex.autoflex.dto.ProblemDetail;
 import com.autoflex.autoflex.dto.RawMaterialDTO;
 import com.autoflex.autoflex.dto.RawMaterialResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,7 @@ public interface RawMaterialController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Raw material not found",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<RawMaterialResponseDTO> findById(UUID rawMaterialId);
@@ -62,7 +63,7 @@ public interface RawMaterialController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Raw material not found",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<RawMaterialResponseDTO> deleteById(UUID rawMaterialId);
@@ -82,7 +83,7 @@ public interface RawMaterialController {
             @ApiResponse(
                     responseCode = "400",
                     description = "Invalid input or code already exists",
-                    content = @Content
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))}
             )
     })
     ResponseEntity<RawMaterialResponseDTO> update(UUID rawMaterialId, RawMaterialDTO rawMaterialDTO);
